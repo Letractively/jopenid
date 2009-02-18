@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="Building JOpenID" default="package" basedir=".">
+
+    <description>jopenid v1.0</description>
+
+    <property name="src.dir"     value="src" />
+    <property name="build.dir"   value="bin" />
+    <property name="lib.dir"     value="lib" />
+    <property name="release.jar" value="jopenid.jar" />
+
+    <!-- classpath definition -->
+    <path id="build-classpath">
+        <pathelement path="${build.dir}" />
+        <pathelement path="${src.dir}" />
+        <pathelement path="${lib.dir}/servlet-api.jar" />
+    </path>
+
+    <!-- clean all -->
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${release.jar}" />
+    </target>
+
+    <!-- compile all java source files -->
+    <target name="build" depends="clean">
+        <mkdir dir="${build.dir}" />
+        <!-- for product use, set: optimize="on" debug="off" -->
+        <javac destdir="${build.dir}" target="1.5" encoding="utf-8" deprecation="on" debug="on" debuglevel="lines,vars,source">
+            <src path="${src.dir}" />
+            <classpath refid="build-classpath"/>
+        </javac>
+    </target>
+
+    <target name="package" depends="build">
+        <delete file="${release.jar}" />
+        <jar destfile="${release.jar}">
+            <fileset dir="${build.dir}">
+                <include name="**/*.*" />
+            </fileset>
+            <fileset dir="${src.dir}">
+                <include name="**/*.java" />
+            </fileset>
+        </jar>
+    </target>
+
+</project>
