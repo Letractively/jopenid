@@ -15,7 +15,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Open ID Manager for all open id operation.
  * 
