@@ -10,7 +10,6 @@ import java.lang.reflect.Proxy;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,10 +22,10 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         // set proxy if needed:
-        Properties props = System.getProperties();
-        props.put("proxySet", "true");
-        props.put("proxyHost", "palwebcache.core.hp.com");
-        props.put("proxyPort", "8080");
+        //Properties props = System.getProperties();
+        //props.put("proxySet", "true");
+        //props.put("proxyHost", "www.proxy-host.com");
+        //props.put("proxyPort", "8080");
 
         OpenIdManager manager = new OpenIdManager();
         manager.setReturnTo("http://www.example.com/openid_auth");
