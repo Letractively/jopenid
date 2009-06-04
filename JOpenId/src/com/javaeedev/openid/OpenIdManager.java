@@ -24,6 +24,7 @@ public class OpenIdManager {
 
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
+    private ShortName shortName = new ShortName();
     private Map<String, Endpoint> endpointCache = new ConcurrentHashMap<String, Endpoint>();
     private Map<Endpoint, Association> associationCache = new ConcurrentHashMap<Endpoint, Association>();
 
@@ -110,7 +111,15 @@ public class OpenIdManager {
         return Base64.encodeBytes(rawHmac);
     }
 
-    public Endpoint lookupEndpoint(String url) {
+    public Endpoint lookupEndpoint(String nameOrUrl) {
+        String url = null;
+        if (nameOrUrl.startsWith("http://") || nameOrUrl.startsWith("https://"))
+            url = nameOrUrl;
+        else {
+            url = shortName.lookupUrlByName(nameOrUrl);
+            if (url==null)
+                throw new OpenIdException("Cannot find OP URL by name: " + nameOrUrl);
+        }
         Endpoint endpoint = endpointCache.get(url);
         if (endpoint!=null && !endpoint.isExpired())
             return endpoint;

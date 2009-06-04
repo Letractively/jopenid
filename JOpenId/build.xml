@@ -27,7 +27,7 @@
         <!-- for product use, set: optimize="on" debug="off" -->
         <javac destdir="${build.dir}" target="1.5" encoding="utf-8" deprecation="on" debug="on" debuglevel="lines,vars,source">
             <src path="${src.dir}" />
-            <classpath refid="build-classpath"/>
+            <classpath refid="build-classpath" />
         </javac>
     </target>
 
@@ -38,7 +38,7 @@
                 <include name="**/*.*" />
             </fileset>
             <fileset dir="${src.dir}">
-                <include name="**/*.java" />
+                <include name="**" />
             </fileset>
         </jar>
     </target>

@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Sample app for OpenID.
+ * Sample application for OpenID.
  * 
  * @author Michael Liao (askxuefeng@gmail.com)
  */
@@ -22,16 +22,16 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         // set proxy if needed:
-        //Properties props = System.getProperties();
-        //props.put("proxySet", "true");
-        //props.put("proxyHost", "www.proxy-host.com");
-        //props.put("proxyPort", "8080");
+//        java.util.Properties props = System.getProperties();
+//        props.put("proxySet", "true");
+//        props.put("proxyHost", "proxy-host");
+//        props.put("proxyPort", "8080");
 
         OpenIdManager manager = new OpenIdManager();
-        manager.setReturnTo("http://www.example.com/openid_auth");
+        manager.setReturnTo("http://www.example.com/openId");
         manager.setRealm("http://*.example.com");
         manager.setTimeOut(10000);
-        Endpoint endpoint = manager.lookupEndpoint("https://www.google.com/accounts/o8/id");
+        Endpoint endpoint = manager.lookupEndpoint("Google");
         System.out.println(endpoint);
         Association association = manager.lookupAssociation(endpoint);
         System.out.println(association);

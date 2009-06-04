@@ -25,7 +25,6 @@ class Utils {
     private static final String CONTENT = "Content";
 
     static Map<String, Object> httpRequest(String url, String method, String accept, String formPostData, int timeOutInMilliseconds) {
-        System.out.println("HTTP: " + url);
         HttpURLConnection hc = null;
         InputStream input = null;
         OutputStream output = null;
