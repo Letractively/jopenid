@@ -3,7 +3,7 @@ package com.javaeedev.openid;
 import java.text.SimpleDateFormat;
 
 /**
- * Assocation between RP and OP, and it will be cached in memory.
+ * Assocation between RP and OP, and will be cached in memory for a certain time.
  * 
  * @author Michael Liao (askxuefeng@gmail.com)
  */
@@ -42,6 +42,9 @@ public class Association {
         this.expired = System.currentTimeMillis() + maxAgeInMilliseconds;
     }
 
+    /**
+     * True if this association is expired.
+     */
     public boolean isExpired() {
         return System.currentTimeMillis() >= expired;
     }

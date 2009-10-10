@@ -95,6 +95,9 @@ class Utils {
         }
     }
 
+    /**
+     * Get 'max-age' field from HTTP header.
+     */
     static long getMaxAge(Map<String, Object> map) {
         String cache = (String) map.get("Cache-Control");
         if (cache==null)
@@ -113,6 +116,9 @@ class Utils {
         return 0L;
     }
 
+    /**
+     * Get text content from HTTP response.
+     */
     static String getContent(Map<String, Object> map) throws UnsupportedEncodingException {
         byte[] data = (byte[]) map.get(CONTENT);
         String charset = getCharset(map);
@@ -121,6 +127,9 @@ class Utils {
         return new String(data, charset);
     }
 
+    /**
+     * Unzip data using gzip.
+     */
     public static byte[] gunzip(byte[] data) {
         ByteArrayOutputStream byteOutput = new ByteArrayOutputStream(10240);
         GZIPInputStream input = null;
@@ -166,6 +175,9 @@ class Utils {
         return sub.trim();
     }
 
+    /**
+     * Get 'charset' field from HTTP header.
+     */
     public static String getCharset(Map<String, Object> map) {
         String contentType = (String) map.get("Content-Type");
         String charset = null;
@@ -181,6 +193,9 @@ class Utils {
         return charset;
     }
 
+    /**
+     * Encode URL with UTF-8.
+     */
     public static String urlEncode(String s) throws UnsupportedEncodingException {
         return URLEncoder.encode(s, "UTF-8");
     }
@@ -208,6 +223,9 @@ class Utils {
 
     private static final char[] HEX = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
+    /**
+     * Encode bytes as hex string.
+     */
     public static String toHexString(byte[] bytes) {
         int length = bytes.length;
         StringBuffer sb = new StringBuffer(length * 2);

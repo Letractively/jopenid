@@ -3,7 +3,7 @@ package com.javaeedev.openid;
 import java.text.SimpleDateFormat;
 
 /**
- * Endpoint for OP, and it will be cached in memory.
+ * Endpoint for OpenID Provider, and will be cached in memory for a certain time.
  * 
  * @author Michael Liao (askxuefeng@gmail.com)
  */
@@ -12,6 +12,12 @@ public final class Endpoint {
     private final String url;
     private final long expired;
 
+    /**
+     * Build Endpoint object by url and max age.
+     * 
+     * @param url URL of endpoint.
+     * @param maxAgeInMilliSeconds Max age in milliseconds.
+     */
     public Endpoint(String url, long maxAgeInMilliSeconds) {
         if (url==null)
             throw new NullPointerException("Url is null.");
@@ -27,6 +33,9 @@ public final class Endpoint {
         return System.currentTimeMillis() >= expired;
     }
 
+    /**
+     * Two Endpoints are equal and only equal if their urls are equal.
+     */
     @Override
     public boolean equals(Object o) {
         if (o==this)
@@ -37,6 +46,9 @@ public final class Endpoint {
         return false;
     }
 
+    /**
+     * The hash code of Endpoint is equal to its url's hash code.
+     */
     @Override
     public int hashCode() {
         return url.hashCode();

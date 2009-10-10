@@ -54,6 +54,9 @@ public class OpenIdManager {
         }
     }
 
+    /**
+     * Set timeout in milliseconds.
+     */
     public void setTimeOut(int timeOutInMilliseconds) {
         this.timeOut = timeOutInMilliseconds;
     }

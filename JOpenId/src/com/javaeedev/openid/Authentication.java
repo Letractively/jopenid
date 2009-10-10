@@ -1,7 +1,7 @@
 package com.javaeedev.openid;
 
 /**
- * Authentication information returned from OP.
+ * Authentication information returned from OpenID Provider.
  * 
  * @author Michael Liao (askxuefeng@gmail.com)
  */
@@ -10,9 +10,16 @@ public class Authentication {
     private String identity;
     private String email;
 
+
+    /**
+     * Get identity.
+     */
     public String getIdentity() { return identity; }
     public void setIdentity(String identity) { this.identity = identity; }
 
+    /**
+     * Get email.
+     */
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 

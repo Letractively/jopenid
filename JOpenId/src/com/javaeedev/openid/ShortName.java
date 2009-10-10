@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * Store short names which are mapping to providers' urls.
+ * 
+ * @author Michael Liao (askxuefeng@gmail.com)
+ */
 public class ShortName {
 
     private Map<String, String> urlMap = new HashMap<String, String>();
@@ -13,8 +18,7 @@ public class ShortName {
     public ShortName() {
         InputStream input = null;
         try {
-            input = getClass().getClassLoader().getResourceAsStream(
-                    getClass().getPackage().getName().replace('.', '/') + "/ops.properties");
+            input = getClass().getClassLoader().getResourceAsStream("openid-providers.properties");
             Properties props = new Properties();
             props.load(input);
             for (Object k : props.keySet()) {
