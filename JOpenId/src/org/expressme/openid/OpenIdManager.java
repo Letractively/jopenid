@@ -35,6 +35,11 @@ public class OpenIdManager {
     private String returnToUrlEncode = null;
     private String realm = null;
 
+    /**
+     * Set returning address after authentication.
+     * 
+     * @param returnTo URL that should redirect to.
+     */
     public void setReturnTo(String returnTo) {
         try {
             this.returnToUrlEncode = Utils.urlEncode(returnTo);
@@ -45,6 +50,11 @@ public class OpenIdManager {
         this.returnTo = returnTo;
     }
 
+    /**
+     * Set realm. For example, "http://*.example.com".
+     * 
+     * @param realm Realm of RP.
+     */
     public void setRealm(String realm) {
         try {
             this.realm = Utils.urlEncode(realm);
@@ -61,6 +71,9 @@ public class OpenIdManager {
         this.timeOut = timeOutInMilliseconds;
     }
 
+    /**
+     * Get authentication information from HTTP request and key.
+     */
     public Authentication getAuthentication(HttpServletRequest request, byte[] key) {
         // verify:
         String identity = request.getParameter("openid.identity");
@@ -114,6 +127,9 @@ public class OpenIdManager {
         return Base64.encodeBytes(rawHmac);
     }
 
+    /**
+     * Lookup end point by name or full URL.
+     */
     public Endpoint lookupEndpoint(String nameOrUrl) {
         String url = null;
         if (nameOrUrl.startsWith("http://") || nameOrUrl.startsWith("https://"))

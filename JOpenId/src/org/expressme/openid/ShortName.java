@@ -15,6 +15,9 @@ public class ShortName {
 
     private Map<String, String> urlMap = new HashMap<String, String>();
 
+    /**
+     * Load short names from "openid-providers.properties" under class path.
+     */
     public ShortName() {
         InputStream input = null;
         try {

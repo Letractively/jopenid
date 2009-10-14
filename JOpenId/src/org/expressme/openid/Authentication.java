@@ -10,7 +10,6 @@ public class Authentication {
     private String identity;
     private String email;
 
-
     /**
      * Get identity.
      */
