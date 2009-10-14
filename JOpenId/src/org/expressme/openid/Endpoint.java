@@ -13,7 +13,7 @@ public final class Endpoint {
     private final long expired;
 
     /**
-     * Build Endpoint object by url and max age.
+     * Build Endpoint object by URL and max age.
      * 
      * @param url URL of endpoint.
      * @param maxAgeInMilliSeconds Max age in milliseconds.
@@ -25,10 +25,18 @@ public final class Endpoint {
         this.expired = System.currentTimeMillis() + maxAgeInMilliSeconds;
     }
 
+    /**
+     * Get URL of this end point.
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Check if this Endpoint are expired.
+     * 
+     * @return True if expired.
+     */
     public boolean isExpired() {
         return System.currentTimeMillis() >= expired;
     }

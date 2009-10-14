@@ -14,12 +14,20 @@ public class Authentication {
      * Get identity.
      */
     public String getIdentity() { return identity; }
+
+    /**
+     * Set identity.
+     */
     public void setIdentity(String identity) { this.identity = identity; }
 
     /**
      * Get email.
      */
     public String getEmail() { return email; }
+
+    /**
+     * Set email.
+     */
     public void setEmail(String email) { this.email = email; }
 
     @Override

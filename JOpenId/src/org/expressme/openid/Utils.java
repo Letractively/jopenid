@@ -158,10 +158,16 @@ class Utils {
         return byteOutput.toByteArray();
     }
 
+    /**
+     * Get substring between start token and end token.
+     */
     public static String mid(String s, String startToken, String endToken) {
         return mid(s, startToken, endToken, 0);
     }
 
+    /**
+     * Get substring between start token and end token, searching from specific index.
+     */
     public static String mid(String s, String startToken, String endToken, int fromStart) {
         if (startToken==null || endToken==null)
             return null;
@@ -200,6 +206,9 @@ class Utils {
         return URLEncoder.encode(s, "UTF-8");
     }
 
+    /**
+     * Build query string like "a=1&b=2&c=3".
+     */
     public static String buildQuery(List<String> list) {
         if (!list.isEmpty()) {
             StringBuilder sb = new StringBuilder(1024);
