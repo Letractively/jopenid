@@ -24,18 +24,17 @@ public class Main {
         // set proxy if needed:
 //        java.util.Properties props = System.getProperties();
 //        props.put("proxySet", "true");
-//        props.put("proxyHost", "proxy-host");
+//        props.put("proxyHost", "proxy-server");
 //        props.put("proxyPort", "8080");
 
         OpenIdManager manager = new OpenIdManager();
-        manager.setReturnTo("http://www.example.com/openId");
-        manager.setRealm("http://*.example.com");
+        manager.setReturnTo("http://www.openid-example.com/openId");
+        manager.setRealm("http://*.openid-example.com");
         manager.setTimeOut(10000);
         Endpoint endpoint = manager.lookupEndpoint("Google");
         System.out.println(endpoint);
         Association association = manager.lookupAssociation(endpoint);
         System.out.println(association);
-        System.out.println("Association should be stored in session or database.");
         String url = manager.getAuthenticationUrl(endpoint, association);
         System.out.println("Copy the authentication URL in browser:\n" + url);
         System.out.println("After successfully sign on in browser, enter the URL of address bar in browser:");
