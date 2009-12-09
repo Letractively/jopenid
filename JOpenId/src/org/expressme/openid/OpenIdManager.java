@@ -19,12 +19,14 @@ import javax.servlet.http.HttpServletRequest;
  * Open ID Manager for all open id operation.
  * 
  * @author Michael Liao (askxuefeng@gmail.com)
+ * @author Erwin Quinto (erwin.quinto@gmail.com)
  */
 public class OpenIdManager {
 
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
     private ShortName shortName = new ShortName();
+    private ExtNamespace extNamespace = new ExtNamespace();
     private Map<String, Endpoint> endpointCache = new ConcurrentHashMap<String, Endpoint>();
     private Map<Endpoint, Association> associationCache = new ConcurrentHashMap<Endpoint, Association>();
 
@@ -75,6 +77,13 @@ public class OpenIdManager {
      * Get authentication information from HTTP request and key.
      */
     public Authentication getAuthentication(HttpServletRequest request, byte[] key) {
+    	return getAuthentication(request, key, ExtNamespace.DEFAULT_ALIAS);
+    }
+    
+    /**
+     * Get authentication information from HTTP request, key.and alias
+     */
+    public Authentication getAuthentication(HttpServletRequest request, byte[] key, String alias) {
         // verify:
         String identity = request.getParameter("openid.identity");
         if (identity==null)
@@ -103,13 +112,56 @@ public class OpenIdManager {
         String hmac = getHmacSha1(sb.toString(), key);
         if (!sig.equals(hmac))
             throw new OpenIdException("Verify signature failed.");
+        
         // set auth:
         Authentication auth = new Authentication();
         auth.setIdentity(identity);
-        auth.setEmail(request.getParameter("openid.ext1.value.email"));
+        auth.setEmail(request.getParameter("openid." + alias + ".value.email"));
+        auth.setLanguage(request.getParameter("openid." + alias + ".value.language"));
+        auth.setGender(request.getParameter("openid." + alias + ".value.gender"));
+        auth.setFullname(getFullname(request, alias));
+        auth.setFirstname(getFirstname(request, alias));
+        auth.setLastname(getLastname(request, alias));
         return auth;
     }
 
+    String getLastname (HttpServletRequest request, String axa) {
+    	String name = request.getParameter("openid."+axa+".value.lastname");
+    	//If lastname is not supported try to get it from the fullname
+    	if (name == null) {
+    		name = request.getParameter("openid."+axa+".value.fullname");
+    		if (name != null) {
+    			name = name.split(" ")[1];
+    		}
+    	}
+    	return name;
+    }
+    
+    String getFirstname (HttpServletRequest request, String axa) {
+    	String name = request.getParameter("openid."+axa+".value.firstname");
+    	//If firstname is not supported try to get it from the fullname
+    	if (name == null) {
+    		name = request.getParameter("openid."+axa+".value.fullname");
+    		if (name != null) {
+    			name = name.split(" ")[0];
+    		}
+    	}
+    	return name;
+    }
+    
+    String getFullname (HttpServletRequest request, String axa) {
+    	// If fullname is not supported then get combined first and last name
+    	String fname = request.getParameter("openid."+axa+".value.fullname");
+    	if (fname == null) {
+    		fname = request.getParameter("openid."+axa+".value.firstname");
+    		if (fname != null) {
+    			fname += ", ";
+    		}
+    		fname += request.getParameter("openid."+axa+".value.lastname");
+    	}
+    	return fname;
+    }
+    
     String getHmacSha1(String data, byte[] key) {
         SecretKeySpec signingKey = new SecretKeySpec(key, HMAC_SHA1_ALGORITHM);
         Mac mac = null;
@@ -127,6 +179,13 @@ public class OpenIdManager {
         return Base64.encodeBytes(rawHmac);
     }
 
+    /**
+     * Lookup appropriate extension namespace alias.
+     */
+    public String lookupExtNsAlias(String nameOrUrl) {
+        return extNamespace.getAlias(nameOrUrl);
+    }
+    
     /**
      * Lookup end point by name or full URL.
      */
@@ -157,10 +216,14 @@ public class OpenIdManager {
     }
 
     public String getAuthenticationUrl(Endpoint endpoint, Association association) {
+    	return getAuthenticationUrl(endpoint, association, ExtNamespace.DEFAULT_ALIAS);
+    }
+    
+    public String getAuthenticationUrl(Endpoint endpoint, Association association, String alias) {
         StringBuilder sb = new StringBuilder(1024);
         sb.append(endpoint.getUrl())
           .append('?')
-          .append(getAuthQuery())
+          .append(getAuthQuery(alias))
           .append("&openid.return_to=")
           .append(returnToUrlEncode)
           .append("&openid.assoc_handle=")
@@ -235,7 +298,7 @@ public class OpenIdManager {
         return assoc;
     }
 
-    String getAuthQuery() {
+    String getAuthQuery(String axa) {
         if (authQuery!=null)
             return authQuery;
         List<String> list = new ArrayList<String>();
@@ -243,15 +306,20 @@ public class OpenIdManager {
         list.add("openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select");
         list.add("openid.identity=http://specs.openid.net/auth/2.0/identifier_select");
         list.add("openid.mode=checkid_setup");
-        list.add("openid.ns.ext1=http://openid.net/srv/ax/1.0");
-        list.add("openid.ext1.mode=fetch_request");
-        list.add("openid.ext1.type.email=http://schema.openid.net/contact/email");
-        list.add("openid.ext1.required=email");
+        list.add("openid.ns." + axa + "=http://openid.net/srv/ax/1.0");
+        list.add("openid." + axa + ".mode=fetch_request");
+        list.add("openid." + axa + ".type.email=http://axschema.org/contact/email");
+        list.add("openid." + axa + ".type.fullname=http://axschema.org/namePerson");
+        list.add("openid." + axa + ".type.language=http://axschema.org/pref/language");
+        list.add("openid." + axa + ".type.firstname=http://axschema.org/namePerson/first");
+        list.add("openid." + axa + ".type.lastname=http://axschema.org/namePerson/last");
+        list.add("openid." + axa + ".type.gender=http://axschema.org/person/gender");
+        list.add("openid." + axa + ".required=email,fullname,language,firstname,lastname,gender");
         String query = Utils.buildQuery(list);
         authQuery = query;
         return query;
     }
-
+    
     String getAssocQuery() {
         if (assocQuery!=null)
             return assocQuery;
