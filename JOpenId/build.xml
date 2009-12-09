@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <project name="Building JOpenID" default="package" basedir=".">
 
-    <description>jopenid v1.0</description>
+    <description>jopenid v1.05</description>
 
     <property name="src.dir"     value="src" />
     <property name="build.dir"   value="bin" />
     <property name="lib.dir"     value="lib" />
-    <property name="release.jar" value="jopenid.jar" />
+    <property name="release.jar" value="jopenid-1.05.jar" />
 
     <!-- classpath definition -->
     <path id="build-classpath">
