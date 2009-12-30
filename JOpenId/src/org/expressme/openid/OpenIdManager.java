@@ -221,9 +221,13 @@ public class OpenIdManager {
     
     public String getAuthenticationUrl(Endpoint endpoint, Association association, String alias) {
         StringBuilder sb = new StringBuilder(1024);
-        sb.append(endpoint.getUrl())
-          .append('?')
-          .append(getAuthQuery(alias))
+        sb.append(endpoint.getUrl());
+        if (endpoint.getUrl().contains("?")) {
+        	sb.append('&');
+        } else {
+        	sb.append('?');
+        }
+        sb.append(getAuthQuery(alias))
           .append("&openid.return_to=")
           .append(returnToUrlEncode)
           .append("&openid.assoc_handle=")
