@@ -155,7 +155,7 @@ public class OpenIdManager {
     	if (fname == null) {
     		fname = request.getParameter("openid."+axa+".value.firstname");
     		if (fname != null) {
-    			fname += ", ";
+    			fname += " ";
     		}
     		fname += request.getParameter("openid."+axa+".value.lastname");
     	}
