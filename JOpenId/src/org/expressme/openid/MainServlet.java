@@ -16,6 +16,7 @@ public class MainServlet extends HttpServlet {
     static final long ONE_HOUR = 3600000L;
     static final long TWO_HOUR = ONE_HOUR * 2L;
     static final String ATTR_MAC = "openid_mac";
+    static final String ATTR_ALIAS = "openid_alias";
 
     OpenIdManager manager;
 
@@ -33,7 +34,8 @@ public class MainServlet extends HttpServlet {
             checkNonce(request.getParameter("openid.response_nonce"));
             // get authentication:
             byte[] mac_key = (byte[]) request.getSession().getAttribute(ATTR_MAC);
-            Authentication authentication = manager.getAuthentication(request, mac_key);
+            String alias = (String) request.getSession().getAttribute(ATTR_ALIAS);
+            Authentication authentication = manager.getAuthentication(request, mac_key, alias);
             String identity = authentication.getIdentity();
             String email = authentication.getEmail();
             // TODO: create user if not exist in database:
@@ -44,6 +46,7 @@ public class MainServlet extends HttpServlet {
             Endpoint endpoint = manager.lookupEndpoint("Google");
             Association association = manager.lookupAssociation(endpoint);
             request.getSession().setAttribute(ATTR_MAC, association.getRawMacKey());
+            request.getSession().setAttribute(ATTR_ALIAS, endpoint.getAlias());
             String url = manager.getAuthenticationUrl(endpoint, association);
             response.sendRedirect(url);
         }

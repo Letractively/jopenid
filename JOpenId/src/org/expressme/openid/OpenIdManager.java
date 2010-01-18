@@ -74,11 +74,12 @@ public class OpenIdManager {
 
     /**
      * Get authentication information from HTTP request and key.
+     * @deprecated Using getAuthentication(HttpServletRequest request, byte[] key, String alias) instead.
      */
     public Authentication getAuthentication(HttpServletRequest request, byte[] key) {
     	return getAuthentication(request, key, Endpoint.DEFAULT_ALIAS);
     }
-    
+
     /**
      * Get authentication information from HTTP request, key.and alias
      */
