@@ -9,19 +9,24 @@ import java.text.SimpleDateFormat;
  */
 public final class Endpoint {
 
+    static final String DEFAULT_ALIAS = "ext1";
+
     private final String url;
+    private final String alias;
     private final long expired;
 
     /**
      * Build Endpoint object by URL and max age.
      * 
      * @param url URL of endpoint.
+     * @param alias Extension alias.
      * @param maxAgeInMilliSeconds Max age in milliseconds.
      */
-    public Endpoint(String url, long maxAgeInMilliSeconds) {
+    public Endpoint(String url, String alias, long maxAgeInMilliSeconds) {
         if (url==null)
             throw new NullPointerException("Url is null.");
         this.url = url;
+        this.alias = alias;
         this.expired = System.currentTimeMillis() + maxAgeInMilliSeconds;
     }
 
@@ -30,6 +35,13 @@ public final class Endpoint {
      */
     public String getUrl() {
         return url;
+    }
+
+    /**
+     * Get extension alias of this end point.
+     */
+    public String getAlias() {
+        return alias;
     }
 
     /**

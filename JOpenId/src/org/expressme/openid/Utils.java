@@ -80,7 +80,7 @@ class Utils {
             return map;
         }
         catch(IOException e) {
-            throw new OpenIdException(e);
+            throw new OpenIdException("Request failed: " + url, e);
         }
         finally {
             if(output!=null) {

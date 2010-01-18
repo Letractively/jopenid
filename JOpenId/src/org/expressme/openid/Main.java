@@ -24,14 +24,14 @@ public class Main {
         // set proxy if needed:
 //        java.util.Properties props = System.getProperties();
 //        props.put("proxySet", "true");
-//        props.put("proxyHost", "proxy-server");
-//        props.put("proxyPort", "8080");
+//        props.put("proxyHost", "host");
+//        props.put("proxyPort", "port");
 
         OpenIdManager manager = new OpenIdManager();
         manager.setReturnTo("http://www.openid-example.com/openId");
         manager.setRealm("http://*.openid-example.com");
         manager.setTimeOut(10000);
-        Endpoint endpoint = manager.lookupEndpoint("Google");
+        Endpoint endpoint = manager.lookupEndpoint("Yahoo");
         System.out.println(endpoint);
         Association association = manager.lookupAssociation(endpoint);
         System.out.println(association);
@@ -40,7 +40,7 @@ public class Main {
         System.out.println("After successfully sign on in browser, enter the URL of address bar in browser:");
         String ret = readLine();
         HttpServletRequest request = createRequest(ret);
-        Authentication authentication = manager.getAuthentication(request, association.getRawMacKey());
+        Authentication authentication = manager.getAuthentication(request, association.getRawMacKey(), endpoint.getAlias());
         System.out.println(authentication);
     }
 

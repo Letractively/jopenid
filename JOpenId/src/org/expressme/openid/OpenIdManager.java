@@ -26,7 +26,6 @@ public class OpenIdManager {
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
     private ShortName shortName = new ShortName();
-    private ExtNamespace extNamespace = new ExtNamespace();
     private Map<String, Endpoint> endpointCache = new ConcurrentHashMap<String, Endpoint>();
     private Map<Endpoint, Association> associationCache = new ConcurrentHashMap<Endpoint, Association>();
 
@@ -77,7 +76,7 @@ public class OpenIdManager {
      * Get authentication information from HTTP request and key.
      */
     public Authentication getAuthentication(HttpServletRequest request, byte[] key) {
-    	return getAuthentication(request, key, ExtNamespace.DEFAULT_ALIAS);
+    	return getAuthentication(request, key, Endpoint.DEFAULT_ALIAS);
     }
     
     /**
@@ -126,30 +125,34 @@ public class OpenIdManager {
     }
 
     String getLastname (HttpServletRequest request, String axa) {
-    	String name = request.getParameter("openid."+axa+".value.lastname");
-    	//If lastname is not supported try to get it from the fullname
+    	String name = request.getParameter("openid." + axa + ".value.lastname");
+    	// If lastname is not supported try to get it from the fullname
     	if (name == null) {
-    		name = request.getParameter("openid."+axa+".value.fullname");
+    		name = request.getParameter("openid." + axa + ".value.fullname");
     		if (name != null) {
-    			name = name.split(" ")[1];
+    		    int n = name.lastIndexOf(' ');
+    		    if (n!=(-1))
+    		        name = name.substring(n + 1);
     		}
     	}
     	return name;
     }
-    
-    String getFirstname (HttpServletRequest request, String axa) {
-    	String name = request.getParameter("openid."+axa+".value.firstname");
+
+    String getFirstname(HttpServletRequest request, String axa) {
+    	String name = request.getParameter("openid." + axa + ".value.firstname");
     	//If firstname is not supported try to get it from the fullname
     	if (name == null) {
-    		name = request.getParameter("openid."+axa+".value.fullname");
+    		name = request.getParameter("openid." + axa + ".value.fullname");
     		if (name != null) {
-    			name = name.split(" ")[0];
+    		    int n = name.indexOf(' ');
+                if (n!=(-1))
+                    name = name.substring(0, n);
     		}
     	}
     	return name;
     }
-    
-    String getFullname (HttpServletRequest request, String axa) {
+
+    String getFullname(HttpServletRequest request, String axa) {
     	// If fullname is not supported then get combined first and last name
     	String fname = request.getParameter("openid."+axa+".value.fullname");
     	if (fname == null) {
@@ -161,7 +164,7 @@ public class OpenIdManager {
     	}
     	return fname;
     }
-    
+
     String getHmacSha1(String data, byte[] key) {
         SecretKeySpec signingKey = new SecretKeySpec(key, HMAC_SHA1_ALGORITHM);
         Mac mac = null;
@@ -180,28 +183,23 @@ public class OpenIdManager {
     }
 
     /**
-     * Lookup appropriate extension namespace alias.
-     */
-    public String lookupExtNsAlias(String nameOrUrl) {
-        return extNamespace.getAlias(nameOrUrl);
-    }
-    
-    /**
      * Lookup end point by name or full URL.
      */
     public Endpoint lookupEndpoint(String nameOrUrl) {
         String url = null;
+        String alias = null;
         if (nameOrUrl.startsWith("http://") || nameOrUrl.startsWith("https://"))
             url = nameOrUrl;
         else {
             url = shortName.lookupUrlByName(nameOrUrl);
             if (url==null)
                 throw new OpenIdException("Cannot find OP URL by name: " + nameOrUrl);
+            alias = shortName.lookupAliasByName(nameOrUrl);
         }
         Endpoint endpoint = endpointCache.get(url);
         if (endpoint!=null && !endpoint.isExpired())
             return endpoint;
-        endpoint = requestEndpoint(url);
+        endpoint = requestEndpoint(url, alias==null ? Endpoint.DEFAULT_ALIAS : alias);
         endpointCache.put(url, endpoint);
         return endpoint;
     }
@@ -216,18 +214,10 @@ public class OpenIdManager {
     }
 
     public String getAuthenticationUrl(Endpoint endpoint, Association association) {
-    	return getAuthenticationUrl(endpoint, association, ExtNamespace.DEFAULT_ALIAS);
-    }
-    
-    public String getAuthenticationUrl(Endpoint endpoint, Association association, String alias) {
         StringBuilder sb = new StringBuilder(1024);
-        sb.append(endpoint.getUrl());
-        if (endpoint.getUrl().contains("?")) {
-        	sb.append('&');
-        } else {
-        	sb.append('?');
-        }
-        sb.append(getAuthQuery(alias))
+        sb.append(endpoint.getUrl())
+          .append(endpoint.getUrl().contains("?") ? '&' : '?')
+          .append(getAuthQuery(endpoint.getAlias()))
           .append("&openid.return_to=")
           .append(returnToUrlEncode)
           .append("&openid.assoc_handle=")
@@ -237,7 +227,7 @@ public class OpenIdManager {
         return sb.toString();
     }
 
-    Endpoint requestEndpoint(String url) {
+    Endpoint requestEndpoint(String url, String alias) {
         Map<String, Object> map = Utils.httpRequest(
                 url,
                 "GET",
@@ -247,7 +237,7 @@ public class OpenIdManager {
         );
         try {
             String content = Utils.getContent(map);
-            return new Endpoint(Utils.mid(content, "<URI>", "</URI>"), Utils.getMaxAge(map));
+            return new Endpoint(Utils.mid(content, "<URI>", "</URI>"), alias, Utils.getMaxAge(map));
         }
         catch(UnsupportedEncodingException e) {
             throw new OpenIdException(e);
@@ -323,7 +313,7 @@ public class OpenIdManager {
         authQuery = query;
         return query;
     }
-    
+
     String getAssocQuery() {
         if (assocQuery!=null)
             return assocQuery;
