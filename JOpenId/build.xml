@@ -6,7 +6,7 @@
     <property name="src.dir"     value="src" />
     <property name="build.dir"   value="bin" />
     <property name="lib.dir"     value="lib" />
-    <property name="release.jar" value="jopenid-1.05.jar" />
+    <property name="release.jar" value="jopenid-1.06.jar" />
 
     <!-- classpath definition -->
     <path id="build-classpath">
