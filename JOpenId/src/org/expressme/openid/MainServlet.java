@@ -24,6 +24,8 @@ public class MainServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         manager = new OpenIdManager();
+        manager.setRealm("http://localhost"); // change to your domain
+        manager.setReturnTo("http://localhost/servlet-mapping"); // change to your servlet url
     }
 
     @Override
