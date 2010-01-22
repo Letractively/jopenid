@@ -179,8 +179,16 @@ public class OpenIdManager {
         catch(InvalidKeyException e) {
             throw new OpenIdException(e);
         }
-        byte[] rawHmac = mac.doFinal(data.getBytes());
-        return Base64.encodeBytes(rawHmac);
+        try {
+            byte[] rawHmac = mac.doFinal(data.getBytes("UTF-8"));
+            return Base64.encodeBytes(rawHmac);
+        }
+        catch(IllegalStateException e) {
+            throw new OpenIdException(e);
+        }
+        catch(UnsupportedEncodingException e) {
+            throw new OpenIdException(e);
+        }
     }
 
     /**

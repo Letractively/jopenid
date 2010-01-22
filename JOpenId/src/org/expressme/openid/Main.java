@@ -28,10 +28,10 @@ public class Main {
 //        props.put("proxyPort", "port");
 
         OpenIdManager manager = new OpenIdManager();
-        manager.setReturnTo("http://www.openid-example.com/openId");
-        manager.setRealm("http://*.openid-example.com");
+        manager.setReturnTo("http://localhost/openId");
+        manager.setRealm("http://localhost");
         manager.setTimeOut(10000);
-        Endpoint endpoint = manager.lookupEndpoint("Yahoo");
+        Endpoint endpoint = manager.lookupEndpoint("Google");
         System.out.println(endpoint);
         Association association = manager.lookupAssociation(endpoint);
         System.out.println(association);
