@@ -110,9 +110,9 @@ public class OpenIdManager {
             sb.append('\n');
         }
         String hmac = getHmacSha1(sb.toString(), key);
-        if (!sig.equals(hmac))
+        if (!safeEquals(sig, hmac))
             throw new OpenIdException("Verify signature failed.");
-        
+
         // set auth:
         Authentication auth = new Authentication();
         auth.setIdentity(identity);
@@ -123,6 +123,18 @@ public class OpenIdManager {
         auth.setFirstname(getFirstname(request, alias));
         auth.setLastname(getLastname(request, alias));
         return auth;
+    }
+
+    boolean safeEquals(String s1, String s2) {
+        if (s1.length()!=s2.length())
+            return false;
+        int result = 0;
+        for (int i=0; i<s1.length(); i++) {
+            int c1 = s1.charAt(i);
+            int c2 = s2.charAt(i);
+            result |= (c1 ^c2);
+        }
+        return result==0;
     }
 
     String getLastname (HttpServletRequest request, String axa) {
