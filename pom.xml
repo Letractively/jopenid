@@ -9,7 +9,7 @@
   <artifactId>JOpenId</artifactId>
   <packaging>jar</packaging>
   <name>JOpenId</name>
-  <version>1.08</version>
+  <version>1.08-SNAPSHOT</version>
   <description>Java client library for OpenID</description>
   <url>http://code.google.com/p/jopenid/</url>
   <licenses>
