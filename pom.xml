@@ -21,6 +21,7 @@
   </licenses>
   <scm>
     <connection>scm:svn:http://jopenid.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://jopenid.googlecode.com/svn/trunk/</developerConnection>
     <url>http://jopenid.googlecode.com/svn/trunk/</url>
   </scm>
   <developers>
