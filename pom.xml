@@ -9,7 +9,7 @@
   <artifactId>JOpenId</artifactId>
   <packaging>jar</packaging>
   <name>JOpenId</name>
-  <version>1.08</version>
+  <version>1.09-SNAPSHOT</version>
   <description>Java client library for OpenID</description>
   <url>http://code.google.com/p/jopenid/</url>
   <licenses>
@@ -20,9 +20,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://jopenid.googlecode.com/svn/tags/JOpenId-1.08</connection>
-    <developerConnection>scm:svn:https://jopenid.googlecode.com/svn/tags/JOpenId-1.08</developerConnection>
-    <url>http://jopenid.googlecode.com/svn/tags/JOpenId-1.08</url>
+    <connection>scm:svn:http://jopenid.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://jopenid.googlecode.com/svn/trunk/</developerConnection>
+    <url>http://jopenid.googlecode.com/svn/trunk/</url>
   </scm>
   <developers>
     <developer>
